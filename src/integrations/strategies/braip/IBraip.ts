@@ -1,3 +1,31 @@
+export enum BraipTransactionStatus {
+  AGUARDANDO_PAGAMENTO = 1,
+  PAGAMENTO_APROVADO = 2,
+  CANCELADA = 3,
+  CHARGEBACK = 4,
+  DEVOLVIDA = 5,
+  EM_ANALISE = 6,
+  ESTORNO = 7,
+  EM_PROCESSAMENTO = 8,
+  PARCIALMENTE_PAGO = 9,
+  PAGAMENTO_ATRASADO = 10,
+}
+
+export enum BraipPaymentType {
+  BOLETO = 1,
+  CARTAO_CREDITO = 2,
+  BOLETO_PARCELADO = 3,
+  GRATIS = 4,
+  PIX = 5,
+}
+
+export enum BraipEvent {
+  ABANDONO = 'ABANDONO',
+  STATUS_ALTERADO = 'STATUS_ALTERADO',
+  BOLETO_ALTERADO = 'BOLETO_ALTERADO',
+  VENDA_COMPLETA = 'VENDA_COMPLETA',
+}
+
 export interface TransItem {
   plan_name: string;
   plan_key: string;
@@ -22,6 +50,7 @@ export interface Braip {
   type: string;
   plan_name: string;
   plan_key: string;
+  plan_amount?: number;
   product_name: string;
   product_key: string;
   product_type: number;
@@ -30,9 +59,9 @@ export interface Braip {
   trans_key: string;
   trans_status: string;
   trans_status_code: string;
-  trans_value: string;
-  trans_total_value: string;
-  trans_discount_value: string;
+  trans_value: number;
+  trans_total_value: number;
+  trans_discount_value: number;
   trans_freight: number;
   trans_freight_type: string;
   trans_payment: string;
@@ -83,6 +112,7 @@ export interface BraipAbandono {
   type: string;
   plan_name: string;
   plan_key: string;
+  plan_amount?: number;
   product_name: string;
   product_key: string;
   trans_createdate: string;

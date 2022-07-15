@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, now } from 'mongoose';
 
 export type WebhookDocument = Webhook & Document;
 
@@ -13,6 +13,12 @@ export class Webhook {
 
   @Prop({ type: Object })
   body: object;
+
+  @Prop({ default: now() })
+  createdAt: Date;
+
+  @Prop({ default: now() })
+  updatedAt: Date;
 }
 
 export const WebhookSchema = SchemaFactory.createForClass(Webhook);
