@@ -1,6 +1,8 @@
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
   HttpException,
   HttpStatus,
+  Inject,
   Injectable,
   NotImplementedException,
 } from '@nestjs/common';
@@ -15,6 +17,7 @@ import { IPostbackStrategy } from './integrations/strategies/IPostbackStrategy';
 export class AppService {
   constructor(
     @InjectModel(Webhook.name) private webhookModel: Model<WebhookDocument>,
+    private readonly amqpConnection: AmqpConnection,
     private readonly integrationService: IntegrationsService,
   ) {}
 
@@ -33,8 +36,8 @@ export class AppService {
     const strategy = this.getStrategy(integration.platform);
     const payload = strategy.transform(body);
     payload.webhook_id = webhookData._id;
+    this.amqpConnection.publish('postbacks', 'postbacks', payload);
     return payload;
-    // publicar a mensagem
   }
 
   getStrategy(platform: string): IPostbackStrategy {
